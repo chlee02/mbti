@@ -1,0 +1,7 @@
+
+MYSQL_USER="root"
+MYSQL_PASSWORD="12341234"
+MYSQL_DB="mbti_db"
+SQL_FILE="create_table.sql"
+
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SOURCE $SQL_FILE" $MYSQL_DB

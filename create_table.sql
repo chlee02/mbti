@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS memes;
+
+CREATE TABLE memes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(10) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  alt VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO memes (type, url, alt) VALUES
+('INTJ', 'https://i.redd.it/eofs17d48s991.jpg', 'INTJ Meme 1');
