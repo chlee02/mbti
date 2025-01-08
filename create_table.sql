@@ -7,6 +7,3 @@ CREATE TABLE memes (
   alt VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO memes (type, url, alt) VALUES
-('INTJ', 'https://i.redd.it/eofs17d48s991.jpg', 'INTJ Meme 1');
