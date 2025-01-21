@@ -21,6 +21,8 @@ mbti_types = ["INTJ", "ENTP", "INFJ", "ENFP", "ISTJ", "ESTP", "ISFJ", "ESFP", "I
 # URL 유효성 검사 함수
 def is_valid_url(url):
     try:
+        if len(url) > 2048:  # URL 최대 길이 제한
+            return False
         response = requests.head(url, timeout=5)  # HEAD 요청으로 빠르게 상태 확인
         return response.status_code == 200  # HTTP 200 OK인 경우만 유효
     except requests.RequestException:
@@ -47,22 +49,34 @@ def save_to_db(mbti_type, images):
         )
     db.commit()
 
+# 데이터베이스에서 start_index 가져오기
+def get_start_index(mbti_type):
+    cursor.execute("SELECT start_index FROM start_index_tracker WHERE type = %s", (mbti_type,))
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        cursor.execute("INSERT INTO start_index_tracker (type, start_index) VALUES (%s, %s)", (mbti_type, 1))
+        db.commit()
+        return 1
+
+# start_index 업데이트
+def update_start_index(mbti_type, new_index):
+    cursor.execute("UPDATE start_index_tracker SET start_index = %s WHERE type = %s", (new_index, mbti_type))
+    db.commit()
+
 # MBTI별 이미지 검색 및 저장
 for mbti in mbti_types:
     print(f"Searching for {mbti} memes...")
     query = f"{mbti} meme"
+    start_index = get_start_index(mbti)  # DB에 저장된 start_index 가져오기
     try:
-        # 이미 저장된 이미지 수 확인
-        cursor.execute("SELECT COUNT(*) FROM memes WHERE type = %s", (mbti,))
-        start_index = cursor.fetchone()[0] + 1
-
-        # 이미지 검색
-        images = search_images(query, start_index, num_results=6)
-        if images:
+        images = search_images(query, start_index=start_index, num_results=5)
+        if images:  # 유효한 이미지가 있으면 저장
             save_to_db(mbti, images)
-            print(f"Saved {len(images)} memes for {mbti}")
-        else:
-            print(f"No valid images found for {mbti}")
+        print(f"Saved {len(images)} memes for {mbti}")
+        # start_index 업데이트 (5 증가)
+        update_start_index(mbti, start_index + 5)
     except Exception as e:
         print(f"Error fetching data for {mbti}: {e}")
 
