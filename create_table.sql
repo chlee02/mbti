@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS memes;
+DROP TABLE IF EXISTS start_index_tracker;
 
 CREATE TABLE memes (
   id INT AUTO_INCREMENT PRIMARY KEY,

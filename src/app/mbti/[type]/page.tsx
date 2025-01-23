@@ -75,8 +75,8 @@ const MbtiPage = () => {
         <p className="mt-2 text-lg">Enjoy memes curated specifically for {type}!</p>
       </header>
       <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {memes.map((meme) => (
-          <div key={meme.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+        {memes.map((meme, index) => (
+          <div key={`${meme.id}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
             <Image
               loader={customLoader}
               src={meme.url}

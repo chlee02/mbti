@@ -68,7 +68,7 @@ def update_start_index(mbti_type, new_index):
 # MBTI별 이미지 검색 및 저장
 for mbti in mbti_types:
     print(f"Searching for {mbti} memes...")
-    query = f"{mbti} meme"
+    query = f"{mbti} meme korean"
     start_index = get_start_index(mbti)  # DB에 저장된 start_index 가져오기
     try:
         images = search_images(query, start_index=start_index, num_results=5)
