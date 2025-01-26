@@ -20,13 +20,23 @@ mbti_types = ["INTJ", "ENTP", "INFJ", "ENFP", "ISTJ", "ESTP", "ISFJ", "ESFP", "I
 
 # URL 유효성 검사 함수
 def is_valid_url(url):
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        )
+    }
     try:
-        if len(url) > 2048:  # URL 최대 길이 제한
+        if len(url) > 2048:
             return False
-        response = requests.head(url, timeout=5)  # HEAD 요청으로 빠르게 상태 확인
-        return response.status_code == 200  # HTTP 200 OK인 경우만 유효
+        response = requests.head(url, headers=headers, timeout=5)  # HEAD 요청으로 콘텐츠 유형만 확인
+        if response.status_code == 200:
+            content_type = response.headers.get("Content-Type", "")
+            if content_type.startswith("image/"):  # 이미지 MIME 타입 확인
+                return True
     except requests.RequestException:
-        return False
+        pass
+    return False
 
 # Google 이미지 검색 함수
 def search_images(query, start_index, num_results=6):
@@ -68,7 +78,7 @@ def update_start_index(mbti_type, new_index):
 # MBTI별 이미지 검색 및 저장
 for mbti in mbti_types:
     print(f"Searching for {mbti} memes...")
-    query = f"{mbti} meme korean"
+    query = f"{mbti} 밈 meme"
     start_index = get_start_index(mbti)  # DB에 저장된 start_index 가져오기
     try:
         images = search_images(query, start_index=start_index, num_results=5)
