@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 // Meme 타입 정의
@@ -15,9 +15,10 @@ interface Meme {
 const customLoader = ({ src }: { src: string }) => src;
 
 const MbtiPage = () => {
-  const { type } = useParams(); // URL에서 MBTI 타입을 가져옴
-  const [memes, setMemes] = useState<Meme[]>([]); // Meme 타입의 배열로 상태 정의
-  const [error, setError] = useState<string | null>(null); // 오류 메시지 상태
+  const { type } = useParams();
+  const [memes, setMemes] = useState<Meme[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedMeme, setSelectedMeme] = useState<Meme | null>(null);
 
   useEffect(() => {
     const fetchMemes = async () => {
@@ -30,11 +31,7 @@ const MbtiPage = () => {
         const data = await response.json();
         setMemes(data);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred.");
-        }
+        setError(err instanceof Error ? err.message : "An unknown error occurred.");
         console.error(err);
       }
     };
@@ -69,30 +66,52 @@ const MbtiPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div className="flex flex-col items-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold">{type} Memes</h1>
         <p className="mt-2 text-lg">Enjoy memes curated specifically for {type}!</p>
       </header>
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <main className="columns-5 gap-4 w-full max-w-6xl space-y-4">
         {memes.map((meme, index) => (
-          <div key={`${meme.id}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+          <div
+            key={`${meme.id}-${index}`}
+            className="break-inside-avoid bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer"
+            onClick={() => setSelectedMeme(meme)}
+          >
             <Image
               loader={customLoader}
               src={meme.url}
               alt={meme.alt}
-              width={300}
-              height={300}
-              className="rounded-lg"
+              width={400}
+              height={400}
+              className="w-full h-auto object-cover rounded-lg"
             />
           </div>
         ))}
       </main>
+
       <footer className="mt-16">
         <Link href="/" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
           Back to Home
         </Link>
       </footer>
+
+      {selectedMeme && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-screen-2xl">
+            <Image
+              loader={customLoader}
+              src={selectedMeme.url}
+              alt={selectedMeme.alt}
+              width={2200}
+              height={2200}
+              className="w-auto max-h-[95vh] object-contain cursor-pointer"
+              onClick={() => setSelectedMeme(null)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
