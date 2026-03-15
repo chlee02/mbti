@@ -72,7 +72,7 @@ const MbtiPage = () => {
         <p className="mt-2 text-lg">Enjoy memes curated specifically for {type}!</p>
       </header>
 
-      <main className="columns-5 gap-4 w-full max-w-6xl space-y-4">
+      <main className="columns-[5] gap-4 space-y-4 w-full max-w-[1000px] mx-auto px-4">
         {memes.map((meme, index) => (
           <div
             key={`${meme.id}-${index}`}
@@ -85,7 +85,7 @@ const MbtiPage = () => {
               alt={meme.alt}
               width={400}
               height={400}
-              className="w-full h-auto object-cover rounded-lg"
+              className="w-full h-auto object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow"
             />
           </div>
         ))}
