@@ -17,6 +17,7 @@ const customLoader = ({ src }: { src: string }) => src;
 const MbtiPage = () => {
   const { type } = useParams();
   const [memes, setMemes] = useState<Meme[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMeme, setSelectedMeme] = useState<Meme | null>(null);
 
@@ -33,6 +34,8 @@ const MbtiPage = () => {
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "An unknown error occurred.");
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,6 +50,14 @@ const MbtiPage = () => {
         <Link href="/" className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
           Go Back Home
         </Link>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+        <h1 className="text-2xl font-bold animate-pulse">Loading Memes...</h1>
       </div>
     );
   }
