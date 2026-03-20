@@ -21,7 +21,8 @@ def is_valid_url(url):
     invalid_keywords = [
         'ytimg.com', 'video', 'thumb', 'hqdefault', 'mqdefault', 
         'sddefault', 'maxresdefault', 'vimeocdn', 'kakaotv', 'preview',
-        'pstatic.net' # 네이버 이미지(블로그/카페) 필터링 추가
+        'pstatic.net', # 네이버 이미지(블로그/카페) 필터링 추가
+        'humoruniv.com', 'fmkorea.com' # 외부 링크 차단 사이트 추가
     ]
     if any(keyword in url.lower() for keyword in invalid_keywords):
         return False
