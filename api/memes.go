@@ -21,10 +21,7 @@ type Meme struct {
 	Alt  string `json:"alt"`
 }
 
-type StartIndexTracker struct {
-	Type       string `gorm:"primaryKey"`
-	StartIndex int
-}
+
 
 var db *gorm.DB
 
@@ -50,7 +47,7 @@ func init() {
 	if err != nil {
 		fmt.Printf("Failed to connect to database: %v\n", err)
 	}
-	db.AutoMigrate(&Meme{}, &StartIndexTracker{})
+	db.AutoMigrate(&Meme{})
 }
 
 func Memes(w http.ResponseWriter, r *http.Request) {

@@ -2,6 +2,7 @@ import psycopg2
 from duckduckgo_search import DDGS
 import requests
 import os
+import time
 from dotenv import load_dotenv
 
 # .env.local 파일 로드
@@ -22,7 +23,7 @@ def is_valid_url(url):
         'ytimg.com', 'video', 'thumb', 'hqdefault', 'mqdefault', 
         'sddefault', 'maxresdefault', 'vimeocdn', 'kakaotv', 'preview',
         'pstatic.net', # 네이버 이미지(블로그/카페) 필터링 추가
-        'humoruniv.com', 'fmkorea.com' # 외부 링크 차단 사이트 추가
+        'humoruniv.com', 'fmkorea.com', 'itssa.co.kr' # 외부 링크 차단 사이트 추가
     ]
     if any(keyword in url.lower() for keyword in invalid_keywords):
         return False
@@ -85,33 +86,25 @@ def save_to_db(mbti_type, images):
     db.commit()
     return saved_count
 
-# 데이터베이스에서 start_index 가져오기
-def get_start_index(mbti_type):
-    cursor.execute("SELECT start_index FROM start_index_tracker WHERE type = %s", (mbti_type,))
-    result = cursor.fetchone()
-    if result:
-        return result[0]
-    else:
-        cursor.execute("INSERT INTO start_index_tracker (type, start_index) VALUES (%s, %s)", (mbti_type, 1))
-        db.commit()
-        return 1
-
-# start_index 업데이트
-def update_start_index(mbti_type, new_index):
-    cursor.execute("INSERT INTO start_index_tracker (type, start_index) VALUES (%s, %s) ON CONFLICT (type) DO UPDATE SET start_index = EXCLUDED.start_index", (mbti_type, new_index))
-    db.commit()
-
 # MBTI별 이미지 검색 및 저장
 for mbti in mbti_types:
     print(f"Searching for {mbti} memes...")
     query = f"{mbti} 밈 meme -site:youtube.com -site:instagram.com -site:tiktok.com -site:facebook.com -site:humoruniv.com -site:naver.com"
+    
     try:
-        # 넉넉하게 검색 후 유효한 것만 저장 (중복/썸네일 대비)
-        images = search_images(query, num_results=15)
+        # 최신 결과 100개를 요청하고 이미 있는 것은 중복 체크로 제외
+        fetch_count = 100
+        images = search_images(query, num_results=fetch_count)
+        
         saved_count = 0
         if images:
             saved_count = save_to_db(mbti, images)
-        print(f"Saved {saved_count} new memes for {mbti} (out of {len(images)} valid urls fetched)")
+        
+        print(f"[{mbti}] Fetched {len(images)} results. Saved {saved_count} new memes.")
+        
+        # 과도한 요청 방지를 위해 2초 대기
+        time.sleep(2)
+        
     except Exception as e:
         print(f"Error fetching data for {mbti}: {e}")
 
