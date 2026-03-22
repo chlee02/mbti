@@ -678,3 +678,10 @@ Found 50 memes
 [0m[31;1m[1983.198ms] [33m[rows:50][35m SELECT * FROM "meme" WHERE type = 'INTP' AND "meme"."deleted_at" IS NULL[0m
 Found 50 memes
 [GIN] 2026/03/22 - 20:45:41 | 200 |  1.983691625s |             ::1 | GET      "/api/memes/INTP"
+Request Path: /api/memes/INTP
+Extracted MBTI Type: INTP
+
+2026/03/22 20:48:31 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[605.424ms] [33m[rows:50][35m SELECT * FROM "meme" WHERE type = 'INTP' AND "meme"."deleted_at" IS NULL[0m
+Found 50 memes
+[GIN] 2026/03/22 - 20:48:31 | 200 |  606.345458ms |             ::1 | GET      "/api/memes/INTP"
