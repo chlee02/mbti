@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   const mbtiTypes = [
@@ -11,10 +12,20 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">
       {/* Header Section */}
-      <header className="w-full max-w-5xl px-6 pt-12 pb-8 flex flex-col items-center border-b border-zinc-200 dark:border-zinc-800">
-        <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+      <header className="relative w-full max-w-5xl px-6 pt-12 pb-12 flex flex-col items-center border-b border-zinc-200 dark:border-zinc-800">
+        <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-8 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
           mbti 밈 저장소
         </h1>
+
+        <div className="w-full flex justify-end px-2 mb-4">
+          <Link 
+            href="/test" 
+            className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 dark:hover:border-blue-500 bg-transparent text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:border-blue-500 text-sm font-bold transition-all duration-300"
+          >
+            내 MBTI 확인하기
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+        </div>
         
         {/* MBTI Selection Grid (Top Aligned) */}
         <nav className="w-full">
