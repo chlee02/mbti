@@ -24,7 +24,9 @@ def is_valid_url(url):
         'sddefault', 'maxresdefault', 'vimeocdn', 'kakaotv', 'preview',
         'pstatic.net', # 네이버 이미지(블로그/카페) 필터링 추가
         'humoruniv.com', 'fmkorea.com', 'itssa.co.kr', 'daum.net', 'daumcdn.net',
-        'kakaocdn.net', 'hdslb.com', 'blogger.googleusercontent.com' # 신규 차단 도메인 추가
+        'kakaocdn.net', 'hdslb.com', 'blogger.googleusercontent.com',
+        'wolf.community', 'twojstory.com', 'dmitory.com', 'ruliweb.com',
+        'duitang.com', 'zuomeme.com' # 신규 차단 도메인 추가 (v3.2)
     ]
     if any(keyword in url.lower() for keyword in invalid_keywords):
         return False

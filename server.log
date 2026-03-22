@@ -587,3 +587,80 @@ Extracted MBTI Type: ENTP
 [0m[31;1m[496.542ms] [33m[rows:76][35m SELECT * FROM "meme" WHERE type = 'ENTP' AND "meme"."deleted_at" IS NULL[0m
 Found 76 memes
 [GIN] 2026/03/22 - 20:02:39 | 200 |  496.787625ms |             ::1 | GET      "/api/memes/ENTP"
+Request Path: /api/memes/INTJ
+Extracted MBTI Type: INTJ
+
+2026/03/22 20:10:50 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[612.545ms] [33m[rows:75][35m SELECT * FROM "meme" WHERE type = 'INTJ' AND "meme"."deleted_at" IS NULL[0m
+Found 75 memes
+[GIN] 2026/03/22 - 20:10:50 | 200 |  612.954875ms |             ::1 | GET      "/api/memes/INTJ"
+Request Path: /api/memes/ENTP
+Extracted MBTI Type: ENTP
+
+2026/03/22 20:13:04 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[571.541ms] [33m[rows:76][35m SELECT * FROM "meme" WHERE type = 'ENTP' AND "meme"."deleted_at" IS NULL[0m
+Found 76 memes
+[GIN] 2026/03/22 - 20:13:04 | 200 |  571.999208ms |             ::1 | GET      "/api/memes/ENTP"
+Request Path: /api/memes/ESFP
+Extracted MBTI Type: ESFP
+
+2026/03/22 20:13:36 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[469.561ms] [33m[rows:50][35m SELECT * FROM "meme" WHERE type = 'ESFP' AND "meme"."deleted_at" IS NULL[0m
+Found 50 memes
+[GIN] 2026/03/22 - 20:13:36 | 200 |       470.6ms |             ::1 | GET      "/api/memes/ESFP"
+Request Path: /api/memes/ESFP
+Extracted MBTI Type: ESFP
+
+2026/03/22 20:15:42 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[474.158ms] [33m[rows:46][35m SELECT * FROM "meme" WHERE type = 'ESFP' AND "meme"."deleted_at" IS NULL[0m
+Found 46 memes
+[GIN] 2026/03/22 - 20:15:42 | 200 |  474.514292ms |             ::1 | GET      "/api/memes/ESFP"
+Request Path: /api/memes/ISTP
+Extracted MBTI Type: ISTP
+
+2026/03/22 20:16:10 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[471.856ms] [33m[rows:50][35m SELECT * FROM "meme" WHERE type = 'ISTP' AND "meme"."deleted_at" IS NULL[0m
+Found 50 memes
+[GIN] 2026/03/22 - 20:16:10 | 200 |  472.688541ms |             ::1 | GET      "/api/memes/ISTP"
+Request Path: /api/memes/INFP
+Extracted MBTI Type: INFP
+
+2026/03/22 20:16:22 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[471.126ms] [33m[rows:38][35m SELECT * FROM "meme" WHERE type = 'INFP' AND "meme"."deleted_at" IS NULL[0m
+Found 38 memes
+[GIN] 2026/03/22 - 20:16:22 | 200 |  472.084958ms |             ::1 | GET      "/api/memes/INFP"
+Request Path: /api/memes/ISFP
+Extracted MBTI Type: ISFP
+
+2026/03/22 20:16:58 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[467.369ms] [33m[rows:32][35m SELECT * FROM "meme" WHERE type = 'ISFP' AND "meme"."deleted_at" IS NULL[0m
+Found 32 memes
+[GIN] 2026/03/22 - 20:16:58 | 200 |  468.144458ms |             ::1 | GET      "/api/memes/ISFP"
+Request Path: /api/memes/ESTP
+Extracted MBTI Type: ESTP
+
+2026/03/22 20:18:24 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[484.142ms] [33m[rows:58][35m SELECT * FROM "meme" WHERE type = 'ESTP' AND "meme"."deleted_at" IS NULL[0m
+Found 58 memes
+[GIN] 2026/03/22 - 20:18:24 | 200 |  484.920875ms |             ::1 | GET      "/api/memes/ESTP"
+Request Path: /api/memes/INTJ
+Extracted MBTI Type: INTJ
+
+2026/03/22 20:18:53 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[567.555ms] [33m[rows:75][35m SELECT * FROM "meme" WHERE type = 'INTJ' AND "meme"."deleted_at" IS NULL[0m
+Found 75 memes
+[GIN] 2026/03/22 - 20:18:53 | 200 |  567.864375ms |             ::1 | GET      "/api/memes/INTJ"
+Request Path: /api/memes/ENFP
+Extracted MBTI Type: ENFP
+
+2026/03/22 20:20:18 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[578.025ms] [33m[rows:55][35m SELECT * FROM "meme" WHERE type = 'ENFP' AND "meme"."deleted_at" IS NULL[0m
+Found 55 memes
+[GIN] 2026/03/22 - 20:20:18 | 200 |  578.309291ms |             ::1 | GET      "/api/memes/ENFP"
+Request Path: /api/memes/ENFJ
+Extracted MBTI Type: ENFJ
+
+2026/03/22 20:21:59 [32m/Users/ch/Documents/project1/mbti/api/memes.go:70 [33mSLOW SQL >= 200ms
+[0m[31;1m[473.371ms] [33m[rows:41][35m SELECT * FROM "meme" WHERE type = 'ENFJ' AND "meme"."deleted_at" IS NULL[0m
+Found 41 memes
+[GIN] 2026/03/22 - 20:21:59 | 200 |  473.801167ms |             ::1 | GET      "/api/memes/ENFJ"

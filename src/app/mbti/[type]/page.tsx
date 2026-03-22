@@ -42,12 +42,19 @@ const MbtiPage = () => {
     fetchMemes();
   }, [type]);
 
+  const mbtiTypes = [
+    "ESTJ", "ESTP", "ESFJ", "ESFP",
+    "ENTJ", "ENTP", "ENFJ", "ENFP",
+    "ISTJ", "ISTP", "ISFJ", "ISFP",
+    "INTJ", "INTP", "INFJ", "INFP"
+  ];
+
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
         <h1 className="text-2xl font-bold">Error Loading Memes</h1>
         <p className="mt-4">{error}</p>
-        <Link href="/" className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        <Link href="/" className="mt-8 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2 rounded-lg hover:opacity-80 transition">
           Go Back Home
         </Link>
       </div>
@@ -56,38 +63,58 @@ const MbtiPage = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
-        <h1 className="text-2xl font-bold animate-pulse">Loading Memes...</h1>
-      </div>
-    );
-  }
-
-  if (memes.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
-        <h1 className="text-2xl font-bold">No Memes Found</h1>
-        <p className="mt-4">
-          The MBTI type <strong>{type}</strong> doesn&apos;t have any memes yet.
-        </p>
-        <Link href="/" className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-          Go Back Home
-        </Link>
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-2xl font-bold animate-pulse text-zinc-400">Loading Memes...</h1>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-8 bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
-      <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold">{type} Memes</h1>
-        <p className="mt-2 text-lg">Enjoy memes curated specifically for {type}!</p>
+    <div className="flex flex-col items-center min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">
+      {/* Header Section (Consistent with Home) */}
+      <header className="w-full max-w-5xl px-6 pt-12 pb-8 flex flex-col items-center border-b border-zinc-200 dark:border-zinc-800">
+        <Link href="/" className="group mb-8">
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 group-hover:opacity-80 transition-opacity">
+            mbti 밈 저장소
+          </h1>
+        </Link>
+        
+        {/* MBTI Selection Grid (Top Nav) */}
+        <nav className="w-full">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+            {mbtiTypes.map((t) => (
+              <a
+                key={t}
+                href={`/mbti/${t}`}
+                className={`flex items-center justify-center p-2 rounded-lg border transition-all duration-200 ${
+                  t === type 
+                  ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-transparent shadow-md" 
+                  : "bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:border-blue-500 dark:hover:border-blue-500"
+                }`}
+              >
+                <span className="text-xs font-bold">{t}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
       </header>
 
-      <main className="columns-[5] gap-4 space-y-4 w-full max-w-[1000px] mx-auto px-4">
+      {/* Current Type Header */}
+      <div className="w-full max-w-5xl px-6 py-10 flex items-center justify-between">
+        <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase">
+          {type}
+          <span className="ml-2 text-blue-500">.</span>
+        </h2>
+        <div className="text-sm font-medium text-zinc-400">
+          Showing {memes.length} memes
+        </div>
+      </div>
+
+      <main className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4 w-full max-w-5xl mx-auto px-6 pb-20">
         {memes.map((meme, index) => (
           <div
             key={`${meme.id}-${index}`}
-            className="break-inside-avoid bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer"
+            className="break-inside-avoid bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
             onClick={() => setSelectedMeme(meme)}
           >
             <Image
@@ -96,16 +123,15 @@ const MbtiPage = () => {
               alt={meme.alt}
               width={400}
               height={400}
-              className="w-full h-auto object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="w-full h-auto object-cover rounded-xl"
             />
           </div>
         ))}
       </main>
 
-      <footer className="mt-16">
-        <Link href="/" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-          Back to Home
-        </Link>
+      {/* Footer */}
+      <footer className="w-full py-8 text-center text-xs text-zinc-500 border-t border-zinc-200 dark:border-zinc-900">
+        <Link href="/" className="hover:text-blue-500 transition-colors">© 2026 mbti 밈 저장소</Link>
       </footer>
 
       {selectedMeme && (
