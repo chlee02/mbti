@@ -109,17 +109,26 @@ const MbtiPage = () => {
       </footer>
 
       {selectedMeme && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-          <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-screen-2xl">
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 p-4" onClick={() => setSelectedMeme(null)}>
+          <div className="relative flex flex-col items-center justify-center max-w-[90vw] max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <Image
               loader={customLoader}
               src={selectedMeme.url}
               alt={selectedMeme.alt}
               width={2200}
               height={2200}
-              className="w-auto max-h-[95vh] object-contain cursor-pointer"
+              className="w-auto h-auto max-w-full max-h-[80vh] object-contain rounded-md cursor-pointer"
               onClick={() => setSelectedMeme(null)}
             />
+            <div className="mt-4 text-white text-sm bg-black bg-opacity-50 px-3 py-1 rounded">
+              출처: {new URL(selectedMeme.url).hostname.replace('www.', '')}
+            </div>
+            <button 
+              className="absolute top-0 right-0 -mt-10 -mr-10 text-white hover:text-gray-300 text-3xl font-bold"
+              onClick={() => setSelectedMeme(null)}
+            >
+              &times;
+            </button>
           </div>
         </div>
       )}

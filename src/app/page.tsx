@@ -2,82 +2,53 @@ import Image from "next/image";
 
 export default function Home() {
   const mbtiTypes = [
-    "ESTJ",
-    "ESTP",
-    "ESFJ",
-    "ESFP",
-    "ENTJ",
-    "ENTP",
-    "ENFJ",
-    "ENFP",
-    "ISTJ",
-    "ISTP",
-    "ISFJ",
-    "ISFP",
-    "INTJ",
-    "INTP",
-    "INFJ",
-    "INFP"
+    "ESTJ", "ESTP", "ESFJ", "ESFP",
+    "ENTJ", "ENTP", "ENFJ", "ENFP",
+    "ISTJ", "ISTP", "ISFJ", "ISFP",
+    "INTJ", "INTP", "INFJ", "INFP"
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
-      {/* Header */}
-      <header className="flex flex-col items-center gap-4">
-        <Image
-          src="/mbti-logo.svg" // 적합한 로고를 public 폴더에 추가하세요
-          alt="MBTI Meme Site Logo"
-          width={150}
-          height={150}
-          priority
-        />
-        <h1 className="text-4xl font-bold text-center">
-          Welcome to the MBTI Meme Site!
+    <div className="flex flex-col items-center min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">
+      {/* Header Section */}
+      <header className="w-full max-w-5xl px-6 pt-12 pb-8 flex flex-col items-center border-b border-zinc-200 dark:border-zinc-800">
+        <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+          mbti 밈 저장소
         </h1>
-        <p className="text-center text-lg max-w-2xl">
-          Explore memes curated for each MBTI type. Click your personality type
-          below and dive into the fun!
-        </p>
+        
+        {/* MBTI Selection Grid (Top Aligned) */}
+        <nav className="w-full">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
+            {mbtiTypes.map((type) => (
+              <a
+                key={type}
+                href={`/mbti/${type}`}
+                className="group relative flex items-center justify-center p-3 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 shadow-sm"
+              >
+                <span className="text-sm font-bold tracking-tight group-hover:scale-110 transition-transform">
+                  {type}
+                </span>
+                <div className="absolute inset-0 rounded-xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ))}
+          </div>
+        </nav>
       </header>
 
-      {/* Main Content */}
-      <main className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-10">
-        {mbtiTypes.map((type) => (
-          <a
-            key={type}
-            href={`/mbti/${type}`}
-            className="flex items-center justify-center w-28 h-28 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-          >
-            <span className="text-xl font-semibold">{type}</span>
-          </a>
-        ))}
+      {/* Main Content Area (Reserved for future images) */}
+      <main className="flex-1 w-full max-w-5xl p-6">
+        {/* Placeholder for future images */}
+        <div className="w-full py-20 flex items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-900 rounded-2xl opacity-50">
+          <p className="text-zinc-400 font-medium">Coming Soon: Trending Memes</p>
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 text-center text-sm">
-        <p>
-          Built with ❤️ using{" "}
-          <a
-            href="https://nextjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-blue-600"
-          >
-            Next.js
-          </a>{" "}
-          and hosted on{" "}
-          <a
-            href="https://vercel.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-blue-600"
-          >
-            Vercel
-          </a>
-          .
-        </p>
+      <footer className="w-full py-8 text-center text-xs text-zinc-500 border-t border-zinc-200 dark:border-zinc-900">
+        <p>© 2026 mbti 밈 저장소. All rights reserved.</p>
       </footer>
     </div>
   );
 }
+
 // git commit test

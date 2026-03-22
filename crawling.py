@@ -23,7 +23,8 @@ def is_valid_url(url):
         'ytimg.com', 'video', 'thumb', 'hqdefault', 'mqdefault', 
         'sddefault', 'maxresdefault', 'vimeocdn', 'kakaotv', 'preview',
         'pstatic.net', # 네이버 이미지(블로그/카페) 필터링 추가
-        'humoruniv.com', 'fmkorea.com', 'itssa.co.kr' # 외부 링크 차단 사이트 추가
+        'humoruniv.com', 'fmkorea.com', 'itssa.co.kr', 'daum.net', 'daumcdn.net',
+        'kakaocdn.net', 'hdslb.com', 'blogger.googleusercontent.com' # 신규 차단 도메인 추가
     ]
     if any(keyword in url.lower() for keyword in invalid_keywords):
         return False
@@ -102,8 +103,8 @@ for mbti in mbti_types:
         
         print(f"[{mbti}] Fetched {len(images)} results. Saved {saved_count} new memes.")
         
-        # 과도한 요청 방지를 위해 2초 대기
-        time.sleep(2)
+        # 과도한 요청 방지를 위해 1초 대기
+        time.sleep(1)
         
     except Exception as e:
         print(f"Error fetching data for {mbti}: {e}")
