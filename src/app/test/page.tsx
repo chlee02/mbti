@@ -32,13 +32,13 @@ type TestMode = 'selection' | 'simple' | 'precision';
 
 interface HistoryState {
   currentStep: number;
-  scores: any;
+  scores: Record<string, number>;
 }
 
 export default function TestPage() {
   const [testMode, setTestMode] = useState<TestMode>('selection');
   const [currentStep, setCurrentStep] = useState(0);
-  const [scores, setScores] = useState<any>({});
+  const [scores, setScores] = useState<Record<string, number>>({});
   const [history, setHistory] = useState<HistoryState[]>([]);
   const [isFinished, setIsFinished] = useState(false);
 
