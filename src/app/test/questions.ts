@@ -100,3 +100,34 @@ export function generatePrecisionQuestions(countPerFunction: number = 4): Questi
 
   return selected;
 }
+
+export const simplePool: Question[] = [
+  // EI: Positive = E, Negative = I
+  { id: 1, text: "생각을 정리할 때, 다른 사람과 이야기하기 전에 스스로 정리하는 시간이 필요한가요?", dimension: 'ei', score: -5 },
+  { id: 2, text: "문제가 생기면 혼자 고민하기보다 주변 사람에게 공유하는 편인가요?", dimension: 'ei', score: 5 },
+  { id: 3, text: "혼자 있을 때보다 다른 사람들과 어울릴 때 더 에너지가 생기는 느낌인가요?", dimension: 'ei', score: 5 },
+  // SN: Positive = N, Negative = S
+  { id: 4, text: "설명을 들을 때 예시보다는 원리를 이해하는 것을 선호하시나요?", dimension: 'sn', score: 5 },
+  { id: 5, text: "이미 검증된 방식보다 새로운 방식으로 시도해보는 것을 즐기시나요?", dimension: 'sn', score: 5 },
+  { id: 6, text: "있는 그대로의 사실과 디테일을 중요하게 여기시나요?", dimension: 'sn', score: -5 },
+  // TF: Positive = T, Negative = F
+  { id: 7, text: "결정을 내릴 때 누구에게 어떤 영향이 갈지를 중요하게 여기시나요?", dimension: 'tf', score: -5 },
+  { id: 8, text: "진실을 위해 때로는 타인의 감정을 상하게 하더라도 솔직하게 말하는 편인가요?", dimension: 'tf', score: 5 },
+  { id: 9, text: "선택을 할 때 좋은 것보단 옳은 것을 선택하는 편인가요?", dimension: 'tf', score: 5 },
+  // JP: Positive = J, Negative = P
+  { id: 10, text: "무엇을 하든 미리 계획을 세우고 그에 맞춰 진행하는 것을 선호하시나요?", dimension: 'jp', score: 5 },
+  { id: 11, text: "일을 진행하면서 방향성을 잡는 편인가요?", dimension: 'jp', score: -5 },
+  { id: 12, text: "주변 환경이 항상 잘 정돈되어 있을 때 마음이 편안하신가요?", dimension: 'jp', score: 5 },
+];
+
+export function generateSimpleQuestions(): Question[] {
+  const selected = [...simplePool];
+
+  // Fisher-Yates Shuffle
+  for (let i = selected.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [selected[i], selected[j]] = [selected[j], selected[i]];
+  }
+
+  return selected;
+}

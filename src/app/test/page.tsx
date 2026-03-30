@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Question, generatePrecisionQuestions } from './questions';
-
-const simpleQuestions: Question[] = [
-  { id: 1, text: "낯선 사람들과 어울리는 것보다 혼자 있는 것이 편한가요?", dimension: 'ei', score: -3 },
-  { id: 2, text: "실제 경험보다는 상상이나 아이디어에 더 관심이 많나요?", dimension: 'sn', score: 3 },
-  { id: 3, text: "결정을 내릴 때 감정보다는 논리적인 이유를 더 중요하게 생각하나요?", dimension: 'tf', score: 3 },
-  { id: 4, text: "계획을 세우기보다는 상황에 맞춰 유연하게 행동하는 것을 선호하시나요?", dimension: 'jp', score: -3 },
-];
+import { Question, generatePrecisionQuestions, generateSimpleQuestions } from './questions';
 
 type TestMode = 'selection' | 'simple' | 'precision';
 
@@ -31,7 +24,7 @@ export default function TestPage() {
     setCurrentStep(0);
 
     if (mode === 'simple') {
-      setQuestions(simpleQuestions);
+      setQuestions(generateSimpleQuestions());
       setScores({ ei: 0, sn: 0, tf: 0, jp: 0 });
     } else {
       const dynamicQs = generatePrecisionQuestions(4); // 8기능 * 4개 = 32문제
@@ -88,7 +81,7 @@ export default function TestPage() {
       };
 
       const getOptions = (val: number) => {
-        if (Math.abs(val) <= 1) return [true, false]; // Ambiguous
+        if (Math.abs(val) <= 3) return [true, false]; // Ambiguous
         return [val >= 0];
       };
 
@@ -183,6 +176,16 @@ export default function TestPage() {
                 {type} 밈 보러가기 →
               </Link>
             ))}
+            {testMode === 'precision' && (
+              <Link
+                href={`/test/result?mode=${testMode}&${new URLSearchParams(
+                  Object.entries(scores).map(([k, v]) => [k, v.toString()])
+                ).toString()}`}
+                className="px-8 py-4 bg-white border border-zinc-200 hover:border-blue-500 text-zinc-600 hover:text-blue-600 font-bold rounded-2xl transition-all shadow-sm text-sm"
+              >
+                상세 분석 결과 보기 (그래프)
+              </Link>
+            )}
           </div>
           {isHighlyAmbiguous && (
             <p className="mt-8 text-zinc-400 text-xs italic">결과가 부정확할 수 있습니다.</p>
