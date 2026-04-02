@@ -1,6 +1,6 @@
 {
   "rewrites": [
     { "source": "/api/ping", "destination": "/api/ping.go" },
-    { "source": "/api/memes/:type", "destination": "/api/memes.go" }
+    { "source": "/api/memes/:path*", "destination": "/api/memes.go" }
   ]
 }

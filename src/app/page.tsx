@@ -31,7 +31,7 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await fetch(`${API_URL}/memes/featured`);
+        const response = await fetch(`${API_URL}/api/memes/featured`);
         if (response.ok) {
           const data = await response.json();
           setFeaturedMemes(data);

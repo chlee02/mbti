@@ -28,7 +28,7 @@ const MbtiPage = () => {
 
   const fetchMemes = async () => {
     try {
-      const response = await fetch(`${API_URL}/memes/${type}`);
+      const response = await fetch(`${API_URL}/api/memes/${type}`);
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -73,7 +73,7 @@ const MbtiPage = () => {
   const handleRecommend = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const response = await fetch(`${API_URL}/memes/${id}/recommend`, {
+      const response = await fetch(`${API_URL}/api/memes/${id}/recommend`, {
         method: 'POST',
       });
       if (response.ok) {
@@ -94,7 +94,7 @@ const MbtiPage = () => {
   const handleDislike = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const response = await fetch(`${API_URL}/memes/${id}/dislike`, {
+      const response = await fetch(`${API_URL}/api/memes/${id}/dislike`, {
         method: 'POST',
       });
       if (response.ok) {
