@@ -60,30 +60,34 @@ func main() {
 			c.JSON(http.StatusOK, gin.H{"message": "pong"})
 		})
 
+		// 오늘의 인기 밈 (추천 1 이상, 랜덤)
+		api.GET("/memes/featured", func(c *gin.Context) {
+			var memes []Meme
+			log.Println("Fetching featured memes...")
+			// recommendations >= 1 인 데이터 중 최대 20개를 랜덤하게 추출
+			result := db.Where("recommendations >= ?", 1).Order("RANDOM()").Limit(20).Find(&memes)
+			if result.Error != nil {
+				log.Printf("Error fetching featured memes: %v", result.Error)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, memes)
+		})
+
 		// MBTI 밈 라우트 (추천순 정렬)
 		api.GET("/memes/:type", func(c *gin.Context) {
 			mbtiType := c.Param("type")
+			log.Printf("Fetching memes for type: %s", mbtiType)
 
 			// 데이터베이스 쿼리 실행
 			var memes []Meme
 			result := db.Where("type = ?", mbtiType).Order("recommendations DESC, created_at DESC").Find(&memes)
 			if result.Error != nil {
+				log.Printf("Error fetching memes for %s: %v", mbtiType, result.Error)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 				return
 			}
 
-			c.JSON(http.StatusOK, memes)
-		})
-
-		// 오늘의 인기 밈 (추천 1 이상, 랜덤)
-		api.GET("/memes/featured", func(c *gin.Context) {
-			var memes []Meme
-			// recommendations >= 1 인 데이터 중 최대 20개를 랜덤하게 추출
-			result := db.Where("recommendations >= ?", 1).Order("RANDOM()").Limit(20).Find(&memes)
-			if result.Error != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-				return
-			}
 			c.JSON(http.StatusOK, memes)
 		})
 
