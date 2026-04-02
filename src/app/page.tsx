@@ -13,7 +13,9 @@ interface Meme {
 }
 
 const customLoader = ({ src }: { src: string }) => src;
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+// 배포 환경에서 환경 변수가 없을 경우 상대 경로 사용 (localhost가 아닐 때)
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:8080');
 
 export default function Home() {
   const [featuredMemes, setFeaturedMemes] = useState<Meme[]>([]);
