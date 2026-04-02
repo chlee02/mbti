@@ -50,67 +50,67 @@ func main() {
 	// Gin 라우터 설정
 	r := gin.Default()
 
+	// CORS 설정
 	r.Use(cors.Default())
 
-	// API 그룹 설정
-	api := r.Group("/api")
-	{
-		// 기본 API 라우트 (Any를 사용하여 HEAD 요청 등 모든 메서드 지원)
-		api.Any("/ping", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"message": "pong"})
-		})
+	// 기본 핑 테스트
+	r.Any("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "pong"})
+	})
 
-		// 오늘의 인기 밈 (추천 1 이상, 랜덤)
-		api.GET("/memes/featured", func(c *gin.Context) {
-			var memes []Meme
-			log.Println("Fetching featured memes...")
-			// recommendations >= 1 인 데이터 중 최대 20개를 랜덤하게 추출
-			result := db.Where("recommendations >= ?", 1).Order("RANDOM()").Limit(20).Find(&memes)
-			if result.Error != nil {
-				log.Printf("Error fetching featured memes: %v", result.Error)
-				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-				return
-			}
-			c.JSON(http.StatusOK, memes)
-		})
+	// 오늘의 인기 밈 (추천 1 이상, 랜덤)
+	r.GET("/memes/featured", func(c *gin.Context) {
+		var memes []Meme
+		log.Println("Fetching featured memes...")
+		result := db.Where("recommendations >= ?", 1).Order("RANDOM()").Limit(20).Find(&memes)
+		if result.Error != nil {
+			log.Printf("Error fetching featured memes: %v", result.Error)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, memes)
+	})
 
-		// MBTI 밈 라우트 (추천순 정렬)
-		api.GET("/memes/:type", func(c *gin.Context) {
-			mbtiType := c.Param("type")
-			log.Printf("Fetching memes for type: %s", mbtiType)
+	// MBTI 밈 라우트 (추천순 정렬)
+	r.GET("/memes/:type", func(c *gin.Context) {
+		mbtiType := c.Param("type")
+		log.Printf("Fetching memes for type: %s", mbtiType)
 
-			// 데이터베이스 쿼리 실행
-			var memes []Meme
-			result := db.Where("type = ?", mbtiType).Order("recommendations DESC, created_at DESC").Find(&memes)
-			if result.Error != nil {
-				log.Printf("Error fetching memes for %s: %v", mbtiType, result.Error)
-				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-				return
-			}
+		var memes []Meme
+		result := db.Where("type = ?", mbtiType).Order("recommendations DESC, created_at DESC").Find(&memes)
+		if result.Error != nil {
+			log.Printf("Error fetching memes for %s: %v", mbtiType, result.Error)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, memes)
+	})
 
-			c.JSON(http.StatusOK, memes)
-		})
+	// 추천수 증가 API
+	r.POST("/memes/:id/recommend", func(c *gin.Context) {
+		id := c.Param("id")
+		if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations + ?", 1)).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Recommended successfully"})
+	})
 
-		// 추천수 증가 API
-		api.POST("/memes/:id/recommend", func(c *gin.Context) {
-			id := c.Param("id")
-			if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations + ?", 1)).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-			c.JSON(http.StatusOK, gin.H{"message": "Recommended successfully"})
-		})
-		// 추천수 감소(비추천) API
-		api.POST("/memes/:id/dislike", func(c *gin.Context) {
-			id := c.Param("id")
-			if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations - ?", 1)).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-			c.JSON(http.StatusOK, gin.H{"message": "Disliked successfully"})
-		})
+	// 비추천수 증가 API
+	r.POST("/memes/:id/dislike", func(c *gin.Context) {
+		id := c.Param("id")
+		if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations - ?", 1)).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Disliked successfully"})
+	})
+
+	// 배포 환경 포트 설정
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
-
-	// 서버 실행
-	r.Run(":8080")
+	log.Printf("Server listening on :%s", port)
+	r.Run(":" + port)
 }

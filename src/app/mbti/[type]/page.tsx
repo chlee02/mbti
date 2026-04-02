@@ -14,8 +14,7 @@ interface Meme {
 }
 
 const customLoader = ({ src }: { src: string }) => src;
-// /api 중복을 방지하기 위해 베이스 주소만 사용
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/api$/, "");
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 const MbtiPage = () => {
   const { type } = useParams();
@@ -27,7 +26,7 @@ const MbtiPage = () => {
 
   const fetchMemes = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/memes/${type}`);
+      const response = await fetch(`${API_URL}/memes/${type}`);
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -72,7 +71,7 @@ const MbtiPage = () => {
   const handleRecommend = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const response = await fetch(`${API_URL}/api/memes/${id}/recommend`, {
+      const response = await fetch(`${API_URL}/memes/${id}/recommend`, {
         method: 'POST',
       });
       if (response.ok) {
@@ -93,7 +92,7 @@ const MbtiPage = () => {
   const handleDislike = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const response = await fetch(`${API_URL}/api/memes/${id}/dislike`, {
+      const response = await fetch(`${API_URL}/memes/${id}/dislike`, {
         method: 'POST',
       });
       if (response.ok) {
