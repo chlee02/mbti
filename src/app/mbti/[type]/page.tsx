@@ -119,10 +119,18 @@ const MbtiPage = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
-        <h1 className="text-2xl font-bold">Error Loading Memes</h1>
-        <p className="mt-4">{error}</p>
-        <Link href="/" className="mt-8 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2 rounded-lg hover:opacity-80 transition">
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-center">
+        <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-200 dark:border-red-800 max-w-md">
+          <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">Error Loading Memes</h1>
+          <p className="mt-4 text-zinc-600 dark:text-zinc-400 font-medium">{error}</p>
+          <div className="mt-6 pt-6 border-t border-red-200 dark:border-red-800/50">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mb-2">Technical Details</p>
+            <code className="text-[10px] bg-white dark:bg-black p-2 rounded block break-all text-zinc-500">
+              Target: {API_URL}/memes/{type}
+            </code>
+          </div>
+        </div>
+        <Link href="/" className="mt-8 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-3 rounded-xl hover:opacity-80 transition font-bold text-sm shadow-lg">
           Go Back Home
         </Link>
       </div>
