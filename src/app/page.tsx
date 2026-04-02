@@ -13,6 +13,7 @@ interface Meme {
 }
 
 const customLoader = ({ src }: { src: string }) => src;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
 export default function Home() {
   const [featuredMemes, setFeaturedMemes] = useState<Meme[]>([]);
@@ -28,7 +29,6 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
         const response = await fetch(`${API_URL}/memes/featured`);
         if (response.ok) {
           const data = await response.json();

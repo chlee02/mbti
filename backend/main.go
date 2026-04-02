@@ -16,22 +16,29 @@ var db *gorm.DB
 
 // 데이터베이스 연결 설정
 func connectDatabase() {
-	// Root 디렉토리의 .env.local 로드 (필요시 경로 조정)
+	// Root 디렉토리의 .env.local 로드 (현지 로컬 개발용)
 	err := godotenv.Load("../.env.local")
 	if err != nil {
-		log.Println("No .env.local file found, falling back to OS environment variables")
+		log.Println("Note: No .env.local file found, using production environment variables")
 	}
 
 	dsn := os.Getenv("POSTGRES_URL")
 	if dsn == "" {
-		log.Fatal("POSTGRES_URL environment variable is not set")
+		log.Fatal("POSTGRES_URL environment variable is missing. Database access unavailable.")
 	}
 
+	log.Println("Connecting to database...")
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatalf("Critical: Failed to connect to database. URL format or permissions may be invalid. Error: %v", err)
 	}
-	log.Println("Postgres Database connected!")
+
+	sqlDB, _ := db.DB()
+	if err := sqlDB.Ping(); err != nil {
+		log.Fatal("Database is connected but not responding to PING")
+	}
+
+	log.Println("Database connection established successfully!")
 	db.AutoMigrate(&Meme{})
 }
 

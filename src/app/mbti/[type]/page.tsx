@@ -14,6 +14,7 @@ interface Meme {
 }
 
 const customLoader = ({ src }: { src: string }) => src;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
 const MbtiPage = () => {
   const { type } = useParams();
@@ -25,7 +26,6 @@ const MbtiPage = () => {
 
   const fetchMemes = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
       const response = await fetch(`${API_URL}/memes/${type}`);
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -71,7 +71,6 @@ const MbtiPage = () => {
   const handleRecommend = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
       const response = await fetch(`${API_URL}/memes/${id}/recommend`, {
         method: 'POST',
       });
@@ -93,7 +92,6 @@ const MbtiPage = () => {
   const handleDislike = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
       const response = await fetch(`${API_URL}/memes/${id}/dislike`, {
         method: 'POST',
       });
