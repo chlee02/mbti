@@ -3,10 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -14,13 +16,22 @@ var db *gorm.DB
 
 // 데이터베이스 연결 설정
 func connectDatabase() {
-	dsn := "root:12341234@tcp(127.0.0.1:3306)/mbti_db?charset=utf8mb4&parseTime=True&loc=Local"
-	var err error
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	// Root 디렉토리의 .env.local 로드 (필요시 경로 조정)
+	err := godotenv.Load("../.env.local")
+	if err != nil {
+		log.Println("No .env.local file found, falling back to OS environment variables")
+	}
+
+	dsn := os.Getenv("POSTGRES_URL")
+	if dsn == "" {
+		log.Fatal("POSTGRES_URL environment variable is not set")
+	}
+
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
-	log.Println("Database connected!")
+	log.Println("Postgres Database connected!")
 	db.AutoMigrate(&Meme{})
 }
 
@@ -34,25 +45,60 @@ func main() {
 
 	r.Use(cors.Default())
 
-	// 기본 API 라우트
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "pong"})
-	})
+	// API 그룹 설정
+	api := r.Group("/api")
+	{
+		// 기본 API 라우트
+		api.GET("/ping", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"message": "pong"})
+		})
 
-	// MBTI 밈 라우트
-	r.GET("/memes/:type", func(c *gin.Context) {
-		mbtiType := c.Param("type")
+		// MBTI 밈 라우트 (추천순 정렬)
+		api.GET("/memes/:type", func(c *gin.Context) {
+			mbtiType := c.Param("type")
 
-		// 데이터베이스 쿼리 실행
-		var memes []Meme
-		result := db.Where("type = ?", mbtiType).Find(&memes)
-		if result.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-			return
-		}
+			// 데이터베이스 쿼리 실행
+			var memes []Meme
+			result := db.Where("type = ?", mbtiType).Order("recommendations DESC, created_at DESC").Find(&memes)
+			if result.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+				return
+			}
 
-		c.JSON(http.StatusOK, memes)
-	})
+			c.JSON(http.StatusOK, memes)
+		})
+
+		// 오늘의 인기 밈 (추천 1 이상, 랜덤)
+		api.GET("/memes/featured", func(c *gin.Context) {
+			var memes []Meme
+			// recommendations >= 1 인 데이터 중 최대 20개를 랜덤하게 추출
+			result := db.Where("recommendations >= ?", 1).Order("RANDOM()").Limit(20).Find(&memes)
+			if result.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, memes)
+		})
+
+		// 추천수 증가 API
+		api.POST("/memes/:id/recommend", func(c *gin.Context) {
+			id := c.Param("id")
+			if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations + ?", 1)).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"message": "Recommended successfully"})
+		})
+		// 추천수 감소(비추천) API
+		api.POST("/memes/:id/dislike", func(c *gin.Context) {
+			id := c.Param("id")
+			if err := db.Model(&Meme{}).Where("id = ?", id).UpdateColumn("recommendations", gorm.Expr("recommendations - ?", 1)).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"message": "Disliked successfully"})
+		})
+	}
 
 	// 서버 실행
 	r.Run(":8080")

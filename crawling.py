@@ -77,12 +77,12 @@ def save_to_db(mbti_type, images):
     saved_count = 0
     for image in images:
         # 중복 체크: 이미 DB에 있는 URL인지 확인
-        cursor.execute("SELECT id FROM meme WHERE url = %s", (image["url"],))
+        cursor.execute("SELECT id FROM memes WHERE url = %s", (image["url"],))
         if cursor.fetchone():
             continue
             
         cursor.execute(
-            "INSERT INTO meme (type, url, alt, created_at, updated_at) VALUES (%s, %s, %s, NOW(), NOW())",
+            "INSERT INTO memes (type, url, alt, created_at, updated_at, recommendations) VALUES (%s, %s, %s, NOW(), NOW(), 0)",
             (mbti_type, image["url"], image["alt"])
         )
         saved_count += 1
