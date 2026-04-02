@@ -13,7 +13,8 @@ interface Meme {
 }
 
 const customLoader = ({ src }: { src: string }) => src;
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+// /api 중복을 방지하기 위해 베이스 주소만 사용
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/api$/, "");
 
 export default function Home() {
   const [featuredMemes, setFeaturedMemes] = useState<Meme[]>([]);
@@ -29,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await fetch(`${API_URL}/memes/featured`);
+        const response = await fetch(`${API_URL}/api/memes/featured`);
         if (response.ok) {
           const data = await response.json();
           setFeaturedMemes(data);

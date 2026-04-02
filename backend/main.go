@@ -55,8 +55,8 @@ func main() {
 	// API 그룹 설정
 	api := r.Group("/api")
 	{
-		// 기본 API 라우트
-		api.GET("/ping", func(c *gin.Context) {
+		// 기본 API 라우트 (Any를 사용하여 HEAD 요청 등 모든 메서드 지원)
+		api.Any("/ping", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "pong"})
 		})
 
